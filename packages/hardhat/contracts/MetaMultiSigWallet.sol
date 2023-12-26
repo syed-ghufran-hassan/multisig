@@ -20,6 +20,7 @@ contract MetaMultiSigWallet {
     event ExecuteTransaction(address indexed owner, address payable to, uint256 value, bytes data, uint256 nonce, bytes32 hash, bytes result);
     event Owner(address indexed owner, bool added);
     mapping(address => bool) public isOwner;
+    
     uint public signaturesRequired;
     uint public nonce;
     uint public chainId;
@@ -135,13 +136,14 @@ contract MetaMultiSigWallet {
       return (streams[to].amount * (block.timestamp-streams[to].last)) / streams[to].frequency;
     }
 
+
     function openStream(address to, uint256 amount, uint256 frequency) public onlySelf {
         require(streams[to].amount == 0, "openStream: stream already open");
         require(amount > 0, "openStream: no amount");
         require(frequency > 0, "openStream: no frequency");
 
         streams[to].amount = amount;
-        streams[to].frequency = frequency;
+        streams[to].frequency = frequency; 
         streams[to].last = block.timestamp;
 
         emit OpenStream(to, amount, frequency);
